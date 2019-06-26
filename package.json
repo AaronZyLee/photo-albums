@@ -9,7 +9,8 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
-    "semantic-ui-react": "^0.87.2"
+    "semantic-ui-react": "^0.87.2",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -18,7 +19,7 @@
     "eject": "react-scripts eject",
     "cypress": "cypress",
     "cypress:open": "cypress open",
-    "cypress:react": "cypress run --headed --no-exit --config baseUrl=http://localhost:3000"
+    "cypress:react": "cypress run --headed --config baseUrl=http://localhost:3000 --spec 'cypress/integration/storage/storage.spec.js'"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -36,6 +37,7 @@
     ]
   },
   "devDependencies": {
-    "cypress": "^3.3.1"
+    "cypress": "^3.3.1",
+    "cypress-file-upload": "^3.1.4"
   }
 }

@@ -112,7 +112,7 @@ import {
       it('throws an error when the password does not match with pattern', () => {});
   
       it('should ask for verification code after creating a new user', () => {});
-      
+
     });
   
     describe('Forgot Password:', () => {
@@ -136,6 +136,10 @@ import {
         cy.get(selectors.forgotPasswordBackToSignInLink).click();
         cy.get(selectors.signInHeaderSection).contains('Sign in to your account');
       });
+
+      it('throws an error when the new password does not match the pattern', () =>{});
+
+      it('should ask for verification code after creating new password', () => {});
     });
   });
   
