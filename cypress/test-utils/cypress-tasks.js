@@ -49,6 +49,25 @@ const selectors = {
   const resetPassword = () => {
     cy.get(selectors.signInForgotPasswordLink).click();
   };
+
+  const uploadFile = () => {
+    cy.fixture('images/demo.jpg').then(fileContent => {
+        cy.get('input[type="file"]').upload({fileContent, fileName:'test.jpg'},{subjectType:'input'});                   
+    });
+    cy.wait('@upload');
+    cy.get('@upload').then(xhr => {
+        expect(xhr.method).to.eq('PUT');
+        expect(xhr.status).to.eq(200);
+    });
+  }
+
+  const downloadFile = () => {
+    cy.get('.ui img').should('have.attr','src').then((src) => {
+        cy.request(src).then(response => {
+            expect(response.status).to.eq(200)
+        })
+    });
+  }
   
   
   export {
@@ -57,6 +76,8 @@ const selectors = {
     loginErrorInvalidPassword,
     createAccountLink,
     createAccountAction,
-    resetPassword
+    resetPassword,
+    uploadFile,
+    downloadFile
   };
   

@@ -1,4 +1,4 @@
-import { login } from "../../test-utils/cypress-tasks";
+import { login, uploadFile, downloadFile } from "../../test-utils/cypress-tasks";
 
 describe('Storage test:', () => {
 
@@ -8,55 +8,42 @@ describe('Storage test:', () => {
 
         cy.server();
         cy.route('PUT', '**/*/test').as('upload');
-        cy.route('GET', '**/public/**').as('download');
     });
 
     describe('Upload and Download', () => {
-        it('should upload an public image file to S3 and then download it from S3', () =>{
+        it('should upload a public image file to S3', () =>{
 
             cy.get('select').select('public').should('have.value', 'public');
-            cy.fixture('images/demo.jpg').then(fileContent => {
-                cy.get('input[type="file"]').upload({fileContent, fileName:'test.jpg'},{subjectType:'input'});                   
-            });
-            cy.wait('@upload');
-            cy.get('@upload').then(xhr => {
-                expect(xhr.method).to.eq('PUT');
-                expect(xhr.status).to.eq(200);
-            });
-            // Image still shows even if broken. TODO fix by hiding image when broken
-            cy.get('[class="ui segment"]').find('img').should("be.visible");
-            // cy.wait('@download');
-            // cy.get('@download').then(xhr => {
-            //     expect(xhr.method).to.eq('GET');
-            //     expect(xhr.status).to.eq(200);
-            // });
+            uploadFile();
         });
 
-        it('should upload an protected image file to S3 and then download it from S3', () =>{
+        it('should download an uploaded public file from S3', () => {
+            cy.get('select').select('public').should('have.value', 'public');
+            downloadFile();
+        });
+
+        it('should upload a private file to S3', () =>{
+
             cy.get('select').select('private').should('have.value', 'private');
-            cy.fixture('images/demo.jpg').then(fileContent => {
-                cy.get('input[type="file"]').upload({fileContent, fileName:'test.jpg'},{subjectType:'input'});                   
-            });
-            cy.wait('@upload');
-            cy.get('@upload').then(xhr => {
-                expect(xhr.method).to.eq('PUT');
-                expect(xhr.status).to.eq(200);
-            });
-            cy.get('[class="ui segment"]').find('img').should("be.visible");
+            uploadFile();
         });
 
-        it('should upload an private image file to S3 and then download it from S3', () =>{
-            cy.get('select').select('protected').should('have.value', 'protected');
-            cy.fixture('images/demo.jpg').then(fileContent => {
-                cy.get('input[type="file"]').upload({fileContent, fileName:'test.jpg'},{subjectType:'input'});                   
-            });
-            cy.wait('@upload');
-            cy.get('@upload').then(xhr => {
-                expect(xhr.method).to.eq('PUT');
-                expect(xhr.status).to.eq(200);
-            });
-            cy.get('[class="ui segment"]').find('img').should("be.visible");
+        it('should download an uploaded private file from S3', () => {
+            cy.get('select').select('private').should('have.value', 'private');
+            downloadFile();
         });
+
+        it('should upload a protected file to S3', () =>{
+
+            cy.get('select').select('protected').should('have.value', 'protected');
+            uploadFile();
+        });
+
+        it('should download an uploaded protected file from S3', () => {
+            cy.get('select').select('protected').should('have.value', 'protected');
+            downloadFile();
+        });
+
         it.skip('test', () => {
             cy.get('select').select('protected').should('have.value', 'protected');
             cy.get('[class="ui segment"]').find('img').should("be.visible");

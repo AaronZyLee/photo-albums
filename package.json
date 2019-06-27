@@ -19,7 +19,7 @@
     "eject": "react-scripts eject",
     "cypress": "cypress",
     "cypress:open": "cypress open",
-    "cypress:react": "cypress run --headed --config baseUrl=http://localhost:3000 --spec 'cypress/integration/storage/storage.spec.js'"
+    "cypress:react": "cypress run --headed --no-exit --config baseUrl=http://localhost:3000 --spec 'cypress/integration/storage/storage.spec.js'"
   },
   "eslintConfig": {
     "extends": "react-app"
