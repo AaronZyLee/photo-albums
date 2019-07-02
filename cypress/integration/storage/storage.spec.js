@@ -7,7 +7,7 @@ describe('Storage test:', () => {
         login();
 
         cy.server();
-        cy.route('PUT', '**/*/test').as('upload');
+        cy.route('PUT', '**/*/*').as('upload');
     });
 
     describe('Upload and Download', () => {

@@ -66,6 +66,25 @@ const GetAlbum = `query GetAlbum($id: ID!, $nextTokenForPhotos: String) {
 }
 `;
 
+const UpdateAlbum = `mutation UpdateAlbum($id: ID!, $name: String) {
+  updateAlbum(input:{
+    id: $id
+    name: $name
+  }) {
+    id
+  }
+}
+`;
+
+const DeleteAlbum = `mutation DeleteAlbum($id: ID!) {
+  deleteAlbum(input:{
+    id: $id
+  }) {
+    id
+  }
+}
+`;
+
 const NewPhoto = `mutation NewPhoto($bucket: String!, $fullsize: PhotoS3InfoInput!, $thumbnail: PhotoS3InfoInput!, $photoAlbumId: ID) {
   createPhoto(input:{
     bucket: $bucket
@@ -88,7 +107,7 @@ const DeltePhoto = `mutation DeletePhoto($id: ID!) {
 }
 `;
 
-class NewS3Photo extends React.Component {
+class NewS3Photo extends Component {
   constructor(props) {
     super(props)
     this.state = {permission: 'public'}
@@ -103,13 +122,12 @@ class NewS3Photo extends React.Component {
           <option value="private">private</option>
           <option value="protected">protected</option>
         </select>
-        <S3Image picker imgKey='test' level={this.state.permission} />
-        {/* <S3Image imgKey='test' level='protected' identityId='us-east-1:bc802af1-4d96-44b2-ae58-fcc97256c965'/> */}
+        <S3Image picker level={this.state.permission}/>
       </Segment>
     );
   }
 }
-class S3ImageUpload extends React.Component {
+class S3ImageUpload extends Component {
   constructor(props) {
     super(props);
     this.state = { uploading: false , permission: 'public'}
@@ -153,7 +171,7 @@ class S3ImageUpload extends React.Component {
     this.setState({uploading: true});
     
     let files = [];
-    for (var i=0; i<e.target.files.length; i++) {
+    for (let i=0; i<e.target.files.length; i++) {
       files.push(e.target.files.item(i));
     }
     await Promise.all(files.map(f => this.uploadFile(f)));
@@ -164,6 +182,7 @@ class S3ImageUpload extends React.Component {
   render() {
     return (
       <div>
+        <br/>
         <Form.Button
           onClick={() => document.getElementById('add-image-file-input').click()}
           disabled={this.state.uploading}
@@ -176,35 +195,22 @@ class S3ImageUpload extends React.Component {
           accept='image/*'
           multiple
           onChange={this.onChange}
-          style={{ display: 'none' }}
+          style={{ display: 'none ' }}
         />
-        <select value={this.state.permission} onChange={(e)=>this.setState({permission: e.target.value})}>
-          <option value="public">public</option>
-          <option value="private">private</option>
-        </select>
-        <S3Image picker imgKey='test' level={this.state.permission} />
       </div>
     );
   }
 }
 
 
-class PhotosList extends React.Component {
+class PhotosList extends Component {
 photoItems() {
   console.log(this.props);
-  // var s3 = new AWS.S3(new AWS.Credentials(( Auth.currentAuthenticatedUser)));
-  // var params = {Bucket: "photo-albums83cdbd80218f4df89266735177933689-env", Key: "demoimg.jpg" };
-  // var url = s3.getSignedUrl("getObject", params);
-  // console.log(url);
-  return <S3Image imgKey="1d7c3e8f-e97f-47b7-bd50-0563da56aaae"
-      //imgKey="9413661b-fed1-42e6-82c3-2361c48d1f67" level='private'
-    //imgKey="f7aaccda-7a5e-4e03-8d0d-cb1c6a3b3bff"
-    style={{display: 'inline-block', 'paddingRight': '5px'}}
-    />
   return this.props.photos.map(photo =>
     <S3Image 
       imgKey={photo.thumbnail.key} 
       //level= {photo.permission}
+      level='public'
       style={{display: 'inline-block', 'paddingRight': '5px'}}
       photoId = {photo.id}
     />
@@ -270,7 +276,7 @@ class NewAlbum extends Component {
 }
 
 
-class AlbumsList extends React.Component {
+class AlbumsList extends Component {
   albumItems() {
     return this.props.albums.sort(makeComparator('name')).map(album =>
       <List.Item key={album.id}>
@@ -281,7 +287,7 @@ class AlbumsList extends React.Component {
 
   render() {
     return (
-      <Segment>
+      <Segment data-test='album'>
         <Header as='h3'>My Albums</Header>
         <List divided relaxed>
           {this.albumItems()}
@@ -292,7 +298,7 @@ class AlbumsList extends React.Component {
 }
 
 
-class AlbumDetailsLoader extends React.Component {
+class AlbumDetailsLoader extends Component {
   constructor(props) {
       super(props);
 
@@ -343,12 +349,40 @@ class AlbumDetailsLoader extends React.Component {
 
 
 class AlbumDetails extends Component {
+
   render() {
       if (!this.props.album) return 'Loading album...';
       
       return (
           <Segment>
           <Header as='h3'>{this.props.album.name}</Header>
+          <Form.Button
+            onClick={async () => {
+              await API.graphql(graphqlOperation(DeleteAlbum, {id:this.props.album.id}));
+              window.location.assign('/');
+          }}
+            icon='file image outline'
+            content='Delete Album'
+          />
+          <br/>
+          <Input
+            type='text'
+            placeholder='New Album Name'
+            icon='plus'
+            iconPosition='left'
+            action={{ content: 'Update', onClick: async ()=>{
+                  if (this.state && this.state.albumName) {
+                    await API.graphql(graphqlOperation(UpdateAlbum, {id:this.props.album.id, name:this.state.albumName}));
+                    //window.location.assign(`/albums/${this.props.album.id}`);
+                  } else {
+                    alert("Name cannot be empty")
+                  }
+                } 
+              }}
+            name='albumName'
+            onChange={(e) => this.setState({albumName: e.target.value})}
+          />
+          <br/>
           <S3ImageUpload albumId={this.props.album.id}/>        
           <PhotosList photos={this.props.album.photos.items} />
           {
@@ -366,7 +400,7 @@ class AlbumDetails extends Component {
 }
 
 
-class AlbumsListLoader extends React.Component {
+class AlbumsListLoader extends Component {
     onNewAlbum = (prevQuery, newData) => {
         // When we get data about a new album, we need to put in into an object 
         // with the same shape as the original query results, but with the new data added as well
@@ -385,11 +419,39 @@ class AlbumsListLoader extends React.Component {
                 {({ data, loading }) => {
                     if (loading) { return <div>Loading...</div>; }
                     if (!data.listAlbums) return;
-                return <AlbumsList albums={data.listAlbums.items} />;
+                return (
+                  <div>
+                    <AlbumsList albums={data.listAlbums.items} />
+                    <DeleteAllAlbums albums={data.listAlbums.items} />
+                  </div>
+                );
                 }}
             </Connect>
         );
     }
+}
+
+//For test only
+class DeleteAllAlbums extends Component {
+  constructor(props) {
+    super(props);
+    this.onClick = this.onClick.bind(this);
+  }
+  onClick() {
+    let promises= []
+    this.props.albums.forEach(album => {
+      promises.push(API.graphql(graphqlOperation(DeleteAlbum, {id:album.id})));
+    });
+    Promise.all(promises).then(() => window.location.assign('/'));
+  }
+  render() {
+    return (
+    <Form.Button data-test='deleteAll' 
+    onClick = {this.onClick}
+    icon='delete'
+    content='Delete All Albums'
+    />);
+  }
 }
 
 
@@ -405,7 +467,7 @@ class App extends Component {
 
             <Route
               path="/albums/:albumId"
-              render={ () => <div><NavLink to='/'>Back to Albums list</NavLink></div> }
+              render={ () => <div data-test='backToAlbum'><NavLink to='/'>Back to Albums list</NavLink></div> }
             />
             <Route
               path="/albums/:albumId"
