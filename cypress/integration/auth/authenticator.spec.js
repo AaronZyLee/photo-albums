@@ -137,7 +137,7 @@ import {
         cy.get(selectors.signInHeaderSection).contains('Sign in to your account');
       });
 
-      it('throws an error when the new password does not match the pattern', () =>{});
+      it('throws an error when the new password does not match the pattern', () => {});
 
       it('should ask for verification code after creating new password', () => {});
     });

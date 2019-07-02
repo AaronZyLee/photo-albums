@@ -68,6 +68,14 @@ const selectors = {
         })
     });
   }
+
+  const createAlbum = (album) => {
+    cy.get('input[type="text"]').type(album);
+    cy.get('button').contains('Create').click();
+    cy.wait(2000);
+    cy.reload();
+    cy.get('div[role="listitem"]').contains(album);
+  };
   
   
   export {
@@ -78,6 +86,7 @@ const selectors = {
     createAccountAction,
     resetPassword,
     uploadFile,
-    downloadFile
+    downloadFile,
+    createAlbum
   };
   
