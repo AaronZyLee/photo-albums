@@ -1,9 +1,1 @@
-{
-    "baseUrl": "http://localhost:3000/",
-    "env": {
-        "COGNITO_SIGN_IN_USERNAME": "lizeyu2",
-        "COGNITO_SIGN_IN_PASSWORD": "veryeasy",
-        "COGNITO_SIGN_IN_EMAIL": "lizeyutest01@amazon.com",
-        "COGNITO_SIGN_IN_PHONE_NUMBER": "5555555555"
-    }
-}
+{"env":{"COGNITO_SIGN_IN_USERNAME":"test01","COGNITO_SIGN_IN_PASSWORD":"The#test1","COGNITO_SIGN_IN_EMAIL":"lizeyutest01@amazon.com","COGNITO_SIGN_IN_PHONE_NUMBER":"6666666666"}}

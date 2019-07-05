@@ -98,14 +98,14 @@ const NewPhoto = `mutation NewPhoto($bucket: String!, $fullsize: PhotoS3InfoInpu
 }
 `;
 
-const DeltePhoto = `mutation DeletePhoto($id: ID!) {
-  deletePhoto(input:{
-    id: $id
-  }) {
-    id
-  }
-}
-`;
+// const DeltePhoto = `mutation DeletePhoto($id: ID!) {
+//   deletePhoto(input:{
+//     id: $id
+//   }) {
+//     id
+//   }
+// }
+// `;
 
 class NewS3Photo extends Component {
   constructor(props) {
@@ -122,7 +122,7 @@ class NewS3Photo extends Component {
           <option value="private">private</option>
           <option value="protected">protected</option>
         </select>
-        <S3Image picker level={this.state.permission}/>
+        <S3Image picker level={this.state.permission} imgKey='test'/>
       </Segment>
     );
   }

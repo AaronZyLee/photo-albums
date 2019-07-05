@@ -14,12 +14,17 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:auth": "PORT=3001 react-scripts start",
+    "start:storage": "PORT=3002 react-scripts start",
+    "start:api": "PORT=3003 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "cypress": "cypress",
     "cypress:open": "cypress open",
-    "cypress:react": "cypress run --headed --no-exit --config baseUrl=http://localhost:3000 --spec 'cypress/integration/storage/storage.spec.js'"
+    "cypress:react:auth": "cypress run --headed --config baseUrl=http://localhost:3001 --spec 'cypress/integration/auth/*.spec.js'",
+    "cypress:react:storage": "cypress run --headed --config baseUrl=http://localhost:3002 --spec 'cypress/integration/storage/*.spec.js'",
+    "cypress:react:api": "cypress run --headed --config baseUrl=http://localhost:3003 --spec 'cypress/integration/api/*.spec.js'"
   },
   "eslintConfig": {
     "extends": "react-app"
