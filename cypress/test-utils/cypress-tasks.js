@@ -46,6 +46,19 @@ import {selectors} from './selectors'
     cy.get('input[placeholder="Email"]').type(COGNITO_SIGN_IN_EMAIL);
     cy.get('input[placeholder="Phone Number"]').type(COGNITO_SIGN_IN_PHONE_NUMBER);
   };
+
+  const createAccountWithMissingValue = () => {
+    cy.get('input[placeholder="Username"]').type(COGNITO_SIGN_IN_USERNAME);
+    cy.get('input[placeholder="Email"]').type(COGNITO_SIGN_IN_EMAIL);
+    cy.get('input[placeholder="Phone Number"]').type(COGNITO_SIGN_IN_PHONE_NUMBER);
+  };
+
+const createAccountWithInvalidPasswordFormat = () => {
+  cy.get('input[placeholder="Username"]').type(COGNITO_SIGN_IN_USERNAME);
+  cy.get('input[placeholder="Password"]').type('test');
+  cy.get('input[placeholder="Email"]').type(COGNITO_SIGN_IN_EMAIL);
+  cy.get('input[placeholder="Phone Number"]').type(COGNITO_SIGN_IN_PHONE_NUMBER);
+}
   
   const resetPassword = () => {
     cy.get(selectors.signInForgotPasswordLink).click();
@@ -85,6 +98,8 @@ import {selectors} from './selectors'
     loginErrorInvalidPassword,
     createAccountLink,
     createAccountAction,
+    createAccountWithMissingValue,
+    createAccountWithInvalidPasswordFormat,
     resetPassword,
     uploadFile,
     downloadFile,
