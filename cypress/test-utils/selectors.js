@@ -18,5 +18,12 @@ export const selectors = {
     signInSignInButton: '[data-test="sign-in-sign-in-button"]',
     signInCreateAccountLink: '[data-test="sign-in-create-account-link"]',
     signInForgotPasswordLink: '[data-test="sign-in-forgot-password-link"]',
+    verifyContactSkipLink: '[data-test="verify-contact-skip-link"]',
+    albumList: '[data-test="album-list"]',
+    signInUsernameInput: '[data-test="username-input"]',
+    signInPasswordInput: '[data-test="sign-in-password-input"]',
+    signInSignInButton: '[data-test="sign-in-sign-in-button"]',
+    signInCreateAccountLink: '[data-test="sign-in-create-account-link"]',
+    signInForgotPasswordLink: '[data-test="sign-in-forgot-password-link"]',
     verifyContactSkipLink: '[data-test="verify-contact-skip-link"]'
   };

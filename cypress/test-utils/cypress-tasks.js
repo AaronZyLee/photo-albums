@@ -1,11 +1,12 @@
-const selectors = {
-    signInUsernameInput: '[data-test="username-input"]',
-    signInPasswordInput: '[data-test="sign-in-password-input"]',
-    signInSignInButton: '[data-test="sign-in-sign-in-button"]',
-    signInCreateAccountLink: '[data-test="sign-in-create-account-link"]',
-    signInForgotPasswordLink: '[data-test="sign-in-forgot-password-link"]',
-    verifyContactSkipLink: '[data-test="verify-contact-skip-link"]'
-  };
+import {selectors} from './selectors'
+// const selectors = {
+//     signInUsernameInput: '[data-test="username-input"]',
+//     signInPasswordInput: '[data-test="sign-in-password-input"]',
+//     signInSignInButton: '[data-test="sign-in-sign-in-button"]',
+//     signInCreateAccountLink: '[data-test="sign-in-create-account-link"]',
+//     signInForgotPasswordLink: '[data-test="sign-in-forgot-password-link"]',
+//     verifyContactSkipLink: '[data-test="verify-contact-skip-link"]'
+//   };
   
   const COGNITO_SIGN_IN_USERNAME = Cypress.env('COGNITO_SIGN_IN_USERNAME');
   const COGNITO_SIGN_IN_PASSWORD = Cypress.env('COGNITO_SIGN_IN_PASSWORD');
@@ -74,7 +75,7 @@ const selectors = {
     cy.get('button').contains('Create').click();
     cy.wait(2000);
     cy.reload();
-    cy.get('div[role="listitem"]').contains(album);
+    cy.get(selectors.albumList).contains(album);
   };
   
   
