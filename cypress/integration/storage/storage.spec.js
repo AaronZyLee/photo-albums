@@ -43,10 +43,5 @@ describe('Storage test:', () => {
             cy.get('select').select('protected').should('have.value', 'protected');
             downloadFile();
         });
-
-        it.skip('test', () => {
-            cy.get('select').select('protected').should('have.value', 'protected');
-            cy.get('[class="ui segment"]').find('img').should("be.visible");
-        })
     });
 });

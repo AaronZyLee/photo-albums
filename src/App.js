@@ -98,14 +98,14 @@ const NewPhoto = `mutation NewPhoto($bucket: String!, $fullsize: PhotoS3InfoInpu
 }
 `;
 
-const DeltePhoto = `mutation DeletePhoto($id: ID!) {
-  deletePhoto(input:{
-    id: $id
-  }) {
-    id
-  }
-}
-`;
+// const DeltePhoto = `mutation DeletePhoto($id: ID!) {
+//   deletePhoto(input:{
+//     id: $id
+//   }) {
+//     id
+//   }
+// }
+// `;
 
 class NewS3Photo extends Component {
   constructor(props) {
@@ -122,7 +122,7 @@ class NewS3Photo extends Component {
           <option value="private">private</option>
           <option value="protected">protected</option>
         </select>
-        <S3Image picker level={this.state.permission}/>
+        <S3Image picker level={this.state.permission} imgKey='test'/>
       </Segment>
     );
   }
@@ -289,7 +289,7 @@ class AlbumsList extends Component {
     return (
       <Segment data-test='album'>
         <Header as='h3'>My Albums</Header>
-        <List divided relaxed>
+        <List divided relaxed data-test='album-list'>
           {this.albumItems()}
         </List>
       </Segment>
@@ -421,7 +421,7 @@ class AlbumsListLoader extends Component {
                     if (!data.listAlbums) return;
                 return (
                   <div>
-                    <AlbumsList albums={data.listAlbums.items} />
+                    <AlbumsList albums={data.listAlbums.items}/>
                     <DeleteAllAlbums albums={data.listAlbums.items} />
                   </div>
                 );

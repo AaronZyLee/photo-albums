@@ -1,11 +1,4 @@
-const selectors = {
-    signInUsernameInput: '[data-test="username-input"]',
-    signInPasswordInput: '[data-test="sign-in-password-input"]',
-    signInSignInButton: '[data-test="sign-in-sign-in-button"]',
-    signInCreateAccountLink: '[data-test="sign-in-create-account-link"]',
-    signInForgotPasswordLink: '[data-test="sign-in-forgot-password-link"]',
-    verifyContactSkipLink: '[data-test="verify-contact-skip-link"]'
-  };
+import {selectors} from './selectors'
   
   const COGNITO_SIGN_IN_USERNAME = Cypress.env('COGNITO_SIGN_IN_USERNAME');
   const COGNITO_SIGN_IN_PASSWORD = Cypress.env('COGNITO_SIGN_IN_PASSWORD');
@@ -45,6 +38,19 @@ const selectors = {
     cy.get('input[placeholder="Email"]').type(COGNITO_SIGN_IN_EMAIL);
     cy.get('input[placeholder="Phone Number"]').type(COGNITO_SIGN_IN_PHONE_NUMBER);
   };
+
+  const createAccountWithMissingValue = () => {
+    cy.get('input[placeholder="Username"]').type(COGNITO_SIGN_IN_USERNAME);
+    cy.get('input[placeholder="Email"]').type(COGNITO_SIGN_IN_EMAIL);
+    cy.get('input[placeholder="Phone Number"]').type(COGNITO_SIGN_IN_PHONE_NUMBER);
+  };
+
+const createAccountWithInvalidPasswordFormat = () => {
+  cy.get('input[placeholder="Username"]').type(COGNITO_SIGN_IN_USERNAME);
+  cy.get('input[placeholder="Password"]').type('test');
+  cy.get('input[placeholder="Email"]').type(COGNITO_SIGN_IN_EMAIL);
+  cy.get('input[placeholder="Phone Number"]').type(COGNITO_SIGN_IN_PHONE_NUMBER);
+}
   
   const resetPassword = () => {
     cy.get(selectors.signInForgotPasswordLink).click();
@@ -68,6 +74,14 @@ const selectors = {
         })
     });
   }
+
+  const createAlbum = (album) => {
+    cy.get('input[type="text"]').type(album);
+    cy.get('button').contains('Create').click();
+    cy.wait(2000);
+    cy.reload();
+    cy.get(selectors.albumList).contains(album);
+  };
   
   
   export {
@@ -76,8 +90,11 @@ const selectors = {
     loginErrorInvalidPassword,
     createAccountLink,
     createAccountAction,
+    createAccountWithMissingValue,
+    createAccountWithInvalidPasswordFormat,
     resetPassword,
     uploadFile,
-    downloadFile
+    downloadFile,
+    createAlbum
   };
   

@@ -4,7 +4,9 @@ import {
     loginErrorInvalidPassword,
     createAccountLink,
     createAccountAction,
-    resetPassword } from '../../test-utils/cypress-tasks';
+    resetPassword, 
+    createAccountWithMissingValue,
+    createAccountWithInvalidPasswordFormat} from '../../test-utils/cypress-tasks';
   
   import { selectors } from '../../test-utils/selectors';
   
@@ -107,11 +109,17 @@ import {
         cy.get('div').contains('User already exists');
       });
 
-      it('throws an error when any of the fields is blank', () => {});
+      it('throws an error when any of the fields is blank', () => {
+        createAccountWithMissingValue();
+        cy.get(selectors.signUpCreateAccountButton).click();
+        cy.get('div').contains('The following fields need to be filled out: Password');
+      });
 
-      it('throws an error when the password does not match with pattern', () => {});
-  
-      it('should ask for verification code after creating a new user', () => {});
+      it('throws an error when the password does not match with pattern', () => {
+        createAccountWithInvalidPasswordFormat();
+        cy.get(selectors.signUpCreateAccountButton).click();
+        cy.get('div').contains('Invalid password format');
+      });
 
     });
   
@@ -136,10 +144,6 @@ import {
         cy.get(selectors.forgotPasswordBackToSignInLink).click();
         cy.get(selectors.signInHeaderSection).contains('Sign in to your account');
       });
-
-      it('throws an error when the new password does not match the pattern', () =>{});
-
-      it('should ask for verification code after creating new password', () => {});
     });
   });
   

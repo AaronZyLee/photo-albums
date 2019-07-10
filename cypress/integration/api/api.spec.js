@@ -1,4 +1,4 @@
-import { login } from "../../test-utils/cypress-tasks";
+import { login, createAlbum } from "../../test-utils/cypress-tasks";
 
 describe('API test:', () => {
 
@@ -18,44 +18,22 @@ describe('API test:', () => {
     });
 
     describe('CRUD Operations:', () => {
+
         it('should create a new album', () => {
-            cy.get('input[type="text"]').type('First Album');
-            cy.get('button').contains('Create').click();
-            cy.wait(2000);
-            cy.reload();
-            cy.get('div[role="listitem"]').contains('First Album');
+            createAlbum('First Album');
         });
 
         it('should retrieve albums from dynamicDB and list all albums', () => {
-            cy.get('input[type="text"]').type('First Album');
-            cy.get('button').contains('Create').click();
-            cy.wait(2000);
-            cy.reload();
-            cy.get('div[role="listitem"]').contains('First Album');
-
-            cy.get('input[type="text"]').clear().type('Second Album');
-            cy.get('button').contains('Create').click();
-            cy.wait(2000);
-            cy.reload();
-            cy.get('div[role="listitem"]').contains('Second Album');
-
-
-            cy.get('input[type="text"]').clear().type('Third Album');
-            cy.get('button').contains('Create').click();
-            cy.wait(2000);
-            cy.reload();
-            cy.get('div[role="listitem"]').contains('Third Album');
-
-
-
-            cy.get('div[role="listitem"] a').should('have.attr', 'href');
+            createAlbum('First Album');
+            createAlbum('Second Album');
+            createAlbum('Third Album');
+            cy.get('div[role="listitem"] a').each(el => {
+                cy.wrap(el).should('have.attr', 'href');
+            });
         });
 
         it('should update a album infomation', () => {
-            cy.get('input[type="text"]').type('First Album');
-            cy.get('button').contains('Create').click();
-            cy.wait(2000);
-            cy.reload();
+            createAlbum('First Album');
 
             cy.get('div[role="listitem"] a').click();
             cy.get('input[type="text"]').type('Amplify');
@@ -70,11 +48,7 @@ describe('API test:', () => {
         });
 
         it('should delete an existing album', () => {
-            cy.get('input[type="text"]').type('First Album');
-            cy.get('button').contains('Create').click();
-
-            cy.wait(2000);
-            cy.reload();
+            createAlbum('First Album');
 
             cy.get('div[role="listitem"] a').first().click();
             cy.get('input[type="text"]');
