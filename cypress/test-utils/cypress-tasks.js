@@ -57,8 +57,8 @@ const createAccountWithInvalidPasswordFormat = () => {
   };
 
   const uploadFile = () => {
-    cy.fixture('images/demo.jpg').then(fileContent => {
-        cy.get('input[type="file"]').upload({fileContent, fileName:'test.jpg'},{subjectType:'input'});                   
+    cy.fixture('images/demo.jpg', 'base64').then(fileContent => {
+        cy.get('input[type="file"]').upload({fileContent, fileName:'test.jpg', mimeType: 'image/png'},{subjectType:'input'});                   
     });
     cy.wait('@upload');
     cy.get('@upload').then(xhr => {
