@@ -15,7 +15,7 @@
     "cypress-file-upload": "^3.1.4"
   },
   "scripts": {
-    "setup-dev": "CYPRESS_INSTALL_BINARY=0 npm install",
+    "setup-dev": "CYPRESS_INSTALL_BINARY=0 npm install && yarn link aws-amplify aws-amplify-react",
     "start": "react-scripts start",
     "start:auth": "PORT=3001 react-scripts start",
     "start:storage": "PORT=3002 react-scripts start",
